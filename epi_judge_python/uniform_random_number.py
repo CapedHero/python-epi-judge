@@ -11,32 +11,31 @@ def zero_one_random():
     return random.randrange(2)
 
 
-def uniform_random_str(lower_bound: int, upper_bound: int) -> int:
-    outcome_num: int = upper_bound - lower_bound
-    outcome_num_bin_len: int = len(bin(outcome_num)) - 2
-    throw_bin_digits: list = []
+def uniform_random_using_str(lower_bound: int, upper_bound: int) -> int:
+    outcomes_num: int = upper_bound - lower_bound
+    outcomes_num_bits: int = len(f'{outcomes_num:b}')
+    throw_bits_list: list = []
     while True:
-        for _ in range(outcome_num_bin_len):
-            throw_bin_digits.append(zero_one_random())
-        throw_bin_str: str = ''.join(map(str, throw_bin_digits))
-        throw: int = int(throw_bin_str, 2)
-        if 0 <= throw <= outcome_num:
-            return outcome_num + throw
-        throw_bin_digits.clear()
+        for _ in range(outcomes_num_bits):
+            throw_bits_list.append(zero_one_random())
+        throw_bit_str: str = ''.join(map(str, throw_bits_list))
+        throw: int = int(throw_bit_str, 2)
+        if 0 <= throw <= outcomes_num:
+            return outcomes_num + throw
+        throw_bits_list.clear()
 
 
 def uniform_random(lower_bound: int, upper_bound: int) -> int:
-    outcome_num: int = upper_bound - lower_bound
-    outcome_num_bin_len: int = len(bin(outcome_num)) - 2
+    outcomes_num: int = upper_bound - lower_bound
+    outcomes_num_bits: int = len(bin(outcomes_num)) - 2
     throw: int = 0
     while True:
         throw = zero_one_random()
-        for _ in range(1, outcome_num_bin_len):
+        for _ in range(outcomes_num_bits - 1):
             throw <<= 1
             throw ^= zero_one_random()
-        if 0 <= throw <= outcome_num:
-            return outcome_num + throw
-        throw = 0
+        if 0 <= throw <= outcomes_num:
+            return outcomes_num + throw
 
 
 @enable_executor_hook
